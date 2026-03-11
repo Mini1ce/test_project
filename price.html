@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIFit AR - Select Price</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Kanit', sans-serif; }
+        
+        body { 
+            background-color: #ffffff; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+        }
+
+        header { 
+            padding: 10px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .logo { color: #00008B; font-size: 22px; font-weight: bold; }
+
+        .nav-bar { padding: 8px 5%; cursor: pointer; color: #555; font-size: 14px; }
+
+        main { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-evenly; 
+            padding: 10px 5%; 
+        }
+
+        .text-group h2 { color: #1A237E; font-size: 24px; margin-bottom: 5px; }
+        .text-group p { color: #666; font-size: 14px; }
+
+        /* ส่วนเลือกราคาแบบ List */
+        .price-options {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .price-card {
+            background: #f8fbff;
+            border: 1.5px solid #eef2f6;
+            border-radius: 15px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .price-card:hover, .price-card.active {
+            border-color: #6495ED;
+            background: #e3f2fd;
+            color: #1A237E;
+            transform: translateY(-2px);
+        }
+
+        /* ปุ่มวิเคราะห์ */
+        .btn-analyze {
+            width: 100%;
+            max-width: 350px;
+            background: #6495ED;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(100, 149, 237, 0.3);
+        }
+
+        footer { 
+            background: #E5E5E5; 
+            padding: 10px; 
+            text-align: center; 
+            font-size: 11px; 
+            color: #777; 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AIFit AR</div>
+        <div class="tech-logos" style="font-size: 12px;">✨ Gemini 🔥 Firebase</div>
+    </header>
+
+    <div class="nav-bar" onclick="window.history.back()">◀ ย้อนกลับ</div>
+
+    <main>
+        <div class="text-group">
+            <h2>งบประมาณของคุณ</h2>
+            <p>เลือกช่วงราคาเพื่อให้ AI แนะนำได้แม่นยำขึ้น</p>
+        </div>
+
+        <div class="price-options">
+            <div class="price-card" onclick="selectPrice(this)">ต่ำกว่า 2,000 บาท</div>
+            <div class="price-card" onclick="selectPrice(this)">2,000 - 4,000 บาท</div>
+            <div class="price-card active" onclick="selectPrice(this)">4,000 - 6,000 บาท</div>
+            <div class="price-card" onclick="selectPrice(this)">6,000 บาทขึ้นไป</div>
+        </div>
+
+        <button class="btn-analyze" onclick="location.href='rec.html'">
+            วิเคราะห์ผลลัพธ์
+        </button>
+    </main>
+
+    <footer>
+        Computer Science, RMUTT | © 2026 ShoeSpace Project
+    </footer>
+
+    <script>
+        function selectPrice(element) {
+            document.querySelectorAll('.price-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>

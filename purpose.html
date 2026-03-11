@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIFit AR - Select Purpose</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header & Nav */
+        header {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { color: #00008B; font-size: 28px; font-weight: bold; }
+        .tech-logos { display: flex; gap: 10px; font-weight: 500; }
+
+        .nav-bar {
+            padding: 10px 5%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Content Area */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 5%;
+        }
+
+        h2 {
+            color: #00008B;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        /* Purpose Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .purpose-card {
+            background: #f8fbff;
+            border: 2px solid #eef2f6;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .purpose-card:hover, .purpose-card.active {
+            border-color: #6495ED;
+            background: #e3f2fd;
+            transform: translateY(-5px);
+        }
+
+        .card-icon { font-size: 40px; margin-bottom: 15px; }
+        .card-title { font-size: 20px; font-weight: bold; color: #333; }
+
+        /* Action Button */
+        .btn-analyze {
+            margin-top: 50px;
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            color: #000;
+            border: 1.5px solid #6495ED;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-analyze:hover { background: #f0f4ff; }
+
+        footer {
+            background: #E5E5E5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AIFit AR</div>
+        <div class="tech-logos">
+            <span>✨ Gemini</span>
+            <span>🔥 Firebase</span>
+        </div>
+    </header>
+
+    <div class="nav-bar" onclick="window.history.back()">
+        <span style="font-size: 24px;">◀</span> ย้อนกลับ
+    </div>
+
+    <main>
+        <h2>คุณต้องการรองเท้าสำหรับอะไร?</h2>
+        
+        <div class="card-grid">
+            <div class="purpose-card" onclick="selectPurpose(this)">
+                <div class="card-icon">🏃‍♂️</div>
+                <div class="card-title">วิ่ง / กีฬา</div>
+            </div>
+            <div class="purpose-card" onclick="selectPurpose(this)">
+                <div class="card-icon">👟</div>
+                <div class="card-title">ใส่เที่ยว / ไลฟ์สไตล์</div>
+            </div>
+            <div class="purpose-card" onclick="selectPurpose(this)">
+                <div class="card-icon">🏋️‍♂️</div>
+                <div class="card-title">ฟิตเนส / เทรนนิ่ง</div>
+            </div>
+        </div>
+
+        <button class="btn-analyze" onclick="window.location.href='price.html'"> ถัดไป > </button>
+    </main>
+
+    <footer>
+        Computer Science, RMUTT | © 2026 ShoeSpace Project
+    </footer>
+
+    <script>
+        function selectPurpose(element) {
+            document.querySelectorAll('.purpose-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>

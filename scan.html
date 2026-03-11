@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIFit AR - Scanning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #00008B;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .tech-logos {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            padding: 10px 5%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Scanning Area */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 5%;
+        }
+
+        .scan-container {
+            width: 100%;
+            max-width: 600px;
+            height: 500px;
+            background-color: #E0F7FA;
+            border: 2px solid #333;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            padding: 30px;
+            position: relative;
+        }
+
+        .camera-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .foot-illustration {
+            width: 80%;
+            max-width: 350px;
+            object-fit: contain;
+        }
+
+        .status-text {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            margin-top: 20px;
+        }
+
+        /* Control Button */
+        .btn-next {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            color: #000;
+            border: 2px solid #6495ED;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-next:hover {
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #E5E5E5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AIFit AR</div>
+        <div class="tech-logos">
+            <span>✨ Gemini</span>
+            <span>🔥 Firebase</span>
+        </div>
+    </header>
+
+    <div class="nav-bar" onclick="window.history.back()">
+        <span style="font-size: 24px;">◀</span> ย้อนกลับ
+    </div>
+
+    <main>
+        <div class="scan-container">
+            <div class="camera-icon">📷</div>
+            
+            <img src="foot.png" alt="Foot Scan Grid" class="foot-illustration">
+            
+            <div class="status-text">กำลังตรวจจับเท้า</div>
+        </div>
+
+        <button class="btn-next" onclick="window.location.href='purpose.html'">
+            ถัดไป >  
+        </button>
+    </main>
+
+    <footer>
+        Computer Science, RMUTT | © 2026 ShoeSpace Project
+    </footer>
+
+</body>
+</html>
