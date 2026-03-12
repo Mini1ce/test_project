@@ -4,139 +4,219 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIFit AR - Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Kanit', sans-serif; }
-        body { background-color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; }
-        .logo { color: #00008B; font-size: 28px; font-weight: bold; }
-        .tech-logos { display: flex; gap: 10px; font-weight: 500; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', 'Kanit', sans-serif;
+            background: linear-gradient(160deg, #EEF2FF 0%, #F0FBFF 50%, #F5F0FF 100%);
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+        body::before {
+            content: ''; position: fixed; top: -100px; right: -100px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 0;
+        }
+        header {
+            padding: 20px 6%; display: flex; justify-content: space-between; align-items: center;
+            background: linear-gradient(135deg, rgba(59,95,219,0.1) 0%, rgba(139,92,246,0.08) 100%);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(79,126,245,0.2);
+            position: relative; z-index: 10;
+        }
+        header::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #4F7EF5 30%, #8B5CF6 60%, #06B6D4 85%, transparent 100%);
+        }
+        .logo {
+            background: linear-gradient(135deg, #3B5FDB, #8B5CF6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; font-size: 24px; font-weight: 700;
+        }
+        .tech-badges { display: flex; gap: 8px; }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-gemini { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
+        .badge-firebase { background: linear-gradient(135deg, #fee2e2, #fecaca); color: #991b1b; }
+        .nav-bar {
+            padding: 14px 6%; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; color: #5B6490; font-size: 15px; font-weight: 500;
+            background: rgba(255,255,255,0.5); backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(79,126,245,0.05); position: relative; z-index: 5;
+        }
+        .nav-bar:hover { color: #4F7EF5; }
 
-        .nav-bar { padding: 10px 5%; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        main {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; padding: 24px 6%; gap: 0;
+            position: relative; z-index: 1;
+        }
 
-        main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px 5%; }
-
-        /* พื้นที่แสดงผล AR Model ที่แนะนำ */
-        .ar-viewport {
-            width: 100%;
-            max-width: 800px;
-            height: 400px;
-            background: #f0f4f8;
-            border-radius: 30px;
+        /* 3D Viewer */
+        .viewer-wrapper {
+            width: 100%; max-width: 780px;
+            background: linear-gradient(145deg, rgba(238,242,255,0.92), rgba(224,240,255,0.85));
+            border-radius: 32px 32px 0 0;
             position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
-            border: 2px solid #eef2f6;
+            border: 1px solid rgba(79,126,245,0.15);
+            border-bottom: none;
         }
+        .viewer-wrapper::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #06B6D4, #4F7EF5, #8B5CF6);
+            z-index: 5;
+        }
+        .ar-live-badge {
+            position: absolute; top: 16px; right: 16px; z-index: 10;
+            background: rgba(239,68,68,0.12); color: #ef4444;
+            border: 1px solid rgba(239,68,68,0.3);
+            font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+            padding: 4px 10px; border-radius: 20px;
+        }
+        .ar-corner {
+            position: absolute; width: 28px; height: 28px;
+            border-color: rgba(79,126,245,0.5); border-style: solid; z-index: 10;
+        }
+        .ar-corner.tl { top: 16px; left: 16px; border-width: 2px 0 0 2px; border-radius: 6px 0 0 0; }
+        .ar-corner.tr { top: 16px; right: 55px; border-width: 2px 2px 0 0; border-radius: 0 6px 0 0; }
+        .ar-corner.bl { bottom: 16px; left: 16px; border-width: 0 0 2px 2px; border-radius: 0 0 0 6px; }
+        .ar-corner.br { bottom: 16px; right: 16px; border-width: 0 2px 2px 0; border-radius: 0 0 6px 0; }
 
-        .ar-viewport img { height: 90%; object-fit: contain; }
-
-        /* การ์ดสรุปผลจาก AI */
-        .result-card {
+        model-viewer {
             width: 100%;
-            max-width: 600px;
-            background: #ffffff;
-            border-radius: 25px;
-            padding: 25px;
-            margin-top: -50px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            z-index: 10;
-            border: 1px solid #6495ED;
+            height: 380px;
+            background: transparent;
+            --poster-color: transparent;
         }
 
-        .shoe-brand { color: #6495ED; font-weight: bold; font-size: 14px; text-transform: uppercase; }
-        .shoe-name { font-size: 24px; font-weight: bold; color: #1A237E; margin: 5px 0; }
-        
+        .hint-text {
+            position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+            background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
+            color: #5B6490; font-size: 12px; font-weight: 500;
+            padding: 5px 14px; border-radius: 20px;
+            border: 1px solid rgba(79,126,245,0.15);
+            white-space: nowrap; z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Result Card */
+        .result-card {
+            width: 100%; max-width: 780px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(238,242,255,0.9));
+            border-radius: 0 0 28px 28px;
+            padding: 22px 28px;
+            box-shadow: 0 16px 48px rgba(79,126,245,0.12);
+            border: 1px solid rgba(79,126,245,0.12);
+            border-top: none;
+            backdrop-filter: blur(10px);
+        }
+        .shoe-brand {
+            background: linear-gradient(135deg, #4F7EF5, #8B5CF6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .shoe-name { font-size: 22px; font-weight: 700; color: #1A1F4E; margin: 4px 0 12px; }
         .size-box {
             display: inline-block;
-            background: #E3F2FD;
-            color: #1A237E;
-            padding: 10px 20px;
-            border-radius: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 15px 0;
+            background: linear-gradient(135deg, rgba(79,126,245,0.12), rgba(139,92,246,0.1));
+            color: #3B5FDB; padding: 8px 20px; border-radius: 12px;
+            font-size: 16px; font-weight: 700; margin-bottom: 14px;
+            border: 1px solid rgba(79,126,245,0.2);
         }
-
         .ai-reasoning {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.6;
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 4px solid #6495ED;
+            font-size: 13px; color: #5B6490; line-height: 1.65;
+            background: rgba(255,255,255,0.6);
+            padding: 14px 16px; border-radius: 12px;
+            border-left: 3px solid #4F7EF5;
         }
 
-        /* กลุ่มปุ่ม Action */
         .action-group {
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 30px;
+            width: 100%; max-width: 500px;
+            display: flex; flex-direction: column; gap: 12px;
+            margin-top: 24px;
         }
-
         .btn-chat {
-            background: #ffffff;
-            color: #6495ED;
-            border: 2px solid #6495ED;
-            padding: 18px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
+            color: #4F7EF5; border: 1.5px solid rgba(79,126,245,0.3);
+            padding: 16px; border-radius: 50px;
+            font-size: 16px; font-weight: 600; font-family: 'Outfit', sans-serif;
             cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            transition: all 0.3s;
         }
-
-        .btn-chat:hover { background: #f0f4ff; }
-
+        .btn-chat:hover { background: linear-gradient(135deg, rgba(79,126,245,0.1), rgba(139,92,246,0.1)); transform: translateY(-2px); }
         .btn-done {
-            background: #6495ED;
-            color: white;
-            border: none;
-            padding: 18px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            color: white; border: none; padding: 16px; border-radius: 50px;
+            font-size: 16px; font-weight: 600; font-family: 'Outfit', sans-serif;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(100,149,237,0.4);
+            box-shadow: 0 8px 24px rgba(79,126,245,0.35);
+            transition: all 0.3s;
         }
+        .btn-done:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(79,126,245,0.45); }
 
-        footer { background: #E5E5E5; padding: 20px; text-align: center; color: #666; font-size: 12px; margin-top: auto; }
+        footer {
+            position: relative;
+            background: linear-gradient(135deg, rgba(59,95,219,0.1), rgba(139,92,246,0.08));
+            backdrop-filter: blur(8px);
+            border-top: 2px solid rgba(79,126,245,0.15);
+            padding: 18px; text-align: center; color: #4F6AC0; font-size: 12px;
+            font-weight: 500; z-index: 1; margin-top: auto;
+        }
+        footer::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #4F7EF5, #8B5CF6, #06B6D4, transparent);
+        }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo">AIFit AR</div>
-        <div class="tech-logos"><span>✨ Gemini</span> <span>🔥 Firebase</span></div>
+        <div class="tech-badges">
+            <span class="badge badge-gemini">✨ Gemini</span>
+            <span class="badge badge-firebase">🔥 Firebase</span>
+        </div>
     </header>
-
-    <div class="nav-bar" onclick="window.history.back()">
-        <span style="font-size: 24px;">◀</span> ปรับแต่งตัวเลือกใหม่
-    </div>
+    <div class="nav-bar" onclick="window.history.back()">◀ ปรับแต่งตัวเลือกใหม่</div>
 
     <main>
-        <div class="ar-viewport">
-            <img src="image2.png" alt="AR Visualization">
+        <div class="viewer-wrapper">
+            <div class="ar-corner tl"></div>
+            <div class="ar-corner tr"></div>
+            <div class="ar-corner bl"></div>
+            <div class="ar-corner br"></div>
+            <div class="ar-live-badge">AR · 3D</div>
+
+            <model-viewer
+                src="shoe.glb"
+                alt="Asics Gel-Kayano 30"
+                auto-rotate
+                camera-controls
+                shadow-intensity="1.2"
+                exposure="1.1"
+                shadow-softness="0.8"
+                rotation-per-second="30deg"
+                camera-orbit="0deg 75deg 2.5m"
+                min-camera-orbit="auto auto 1m"
+                max-camera-orbit="auto auto 4m"
+                style="background: transparent;"
+            ></model-viewer>
+
+            <div class="hint-text">👆 ลากเพื่อหมุน · Pinch เพื่อซูม</div>
         </div>
 
         <div class="result-card">
             <p class="shoe-brand">AI Recommended</p>
             <h2 class="shoe-name">Asics Gel-Kayano 30</h2>
-            
             <div class="size-box">ไซส์ที่แนะนำ: 42.5 EU (9 US)</div>
-            
             <div class="ai-reasoning">
-                <strong>วิเคราะห์โดย Gemini:</strong><br>
+                <strong style="color:#3B5FDB;">วิเคราะห์โดย Gemini:</strong><br>
                 เนื่องจากคุณมีสรีระเท้ากว้าง (10.2 ซม.) และต้องการใช้งานเพื่อการวิ่ง ระบบจึงแนะนำรุ่นที่มี Support หน้าเท้ากว้างเป็นพิเศษ เพื่อลดการบีบรัดขณะออกกำลังกาย
             </div>
         </div>
@@ -145,13 +225,10 @@
             <button class="btn-chat" onclick="location.href='chat.html'">
                 💬 สอบถาม AI Advisor เพิ่มเติม
             </button>
-            <button class="btn-done" onclick="location.href='index.html'">เสร็จสิ้น</button>
+            <button class="btn-done" onclick="location.href='index.html'">เสร็จสิ้น ✓</button>
         </div>
     </main>
 
-    <footer>
-        Computer Science, RMUTT | © 2026 ShoeSpace Project
-    </footer>
-
+    <footer>Computer Science, RMUTT | © 2026 ShoeSpace Project</footer>
 </body>
 </html>

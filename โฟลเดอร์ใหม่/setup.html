@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIFit AR - เทียบสัดส่วนบัตร</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Kanit', sans-serif; }
+        body { background-color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; }
+        .logo { color: #00008B; font-size: 28px; font-weight: bold; }
+        .tech-logos { display: flex; gap: 10px; font-weight: 500; }
+
+        .nav-bar { padding: 15px 5%; display: flex; align-items: center; gap: 10px; cursor: pointer; color: #555; font-size: 16px; }
+
+        main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 30px 5%; text-align: center; }
+
+        h2 { color: #1A237E; margin-bottom: 15px; font-size: 26px; }
+        p.subtitle { color: #666; margin-bottom: 10px; font-size: 16px; line-height: 1.5; max-width: 600px; }
+
+        /* ส่วนสาธิตการวางบัตรขนาดใหญ่ (Visual Guide) */
+        .calibration-guide {
+            width: 100%;
+            max-width: 600px;
+            background: #f8fbff;
+            border-radius: 40px;
+            padding: 50px;
+            border: 2px solid #eef2f6;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+        }
+
+        /* จำลองหน้าจอกล้องพร้อมเส้นไกด์ (Card Overlay) */
+        .card-camera-view {
+            width: 100%;
+            height: 250px;
+            background: #E0F7FA; /* สีฟ้าอ่อนตาม Mockup สแกน */
+            border-radius: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px dashed #6495ED; /* เส้นไกด์บัตรเครดิต */
+            position: relative;
+        }
+
+        .card-camera-view::after {
+            content: "💳 วางบัตรให้ตรงล็อค";
+            color: #00008B;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .foot-placeholder {
+            width: 120px;
+            border: 2px solid #6495ED;
+            border-radius: 50% 50% 40% 40%;
+            opacity: 0.3;
+        }
+
+        /* คำแนะนำแบบขั้นตอน */
+        .steps-box {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #eef2f6;
+            text-align: left;
+        }
+
+        .step { display: flex; align-items: start; gap: 15px; margin-bottom: 15px; color: #555; font-size: 15px; line-height: 1.4; }
+        .step-num {
+            background: #E3F2FD;
+            color: #1A237E;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* ปุ่ม Action */
+        .btn-ready {
+            width: 100%;
+            max-width: 400px;
+            background: #6495ED;
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(100,149,237,0.4);
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-ready:hover { background: #4169E1; transform: translateY(-2px); }
+
+        footer { background: #E5E5E5; padding: 25px; text-align: center; color: #666; font-size: 14px; margin-top:-10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AIFit AR</div>
+        <div class="tech-logos"><span>✨ Gemini</span> <span>🔥 Firebase</span></div>
+    </header>
+
+    <div class="nav-bar" onclick="window.history.back()">
+        <span style="font-size: 20px;">◀</span> ย้อนกลับ
+    </div>
+
+    <main>
+        <h2>เทียบสัดส่วนเพื่อความแม่นยำ</h2>
+        <p class="subtitle">การใช้บัตรเครดิตเป็นวัตถุอ้างอิง จะช่วยให้ AI คำนวณขนาดเท้าของคุณได้แม่นยำที่สุดครับ</p>
+
+        <div class="calibration-guide">
+            <div class="card-camera-view">
+                </div>
+            
+            <div class="foot-placeholder"></div>
+
+            <div class="steps-box">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div>วางบัตรเครดิตไว้บนพื้นราบข้างเท้าของคุณ</div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div>จัดตำแหน่งให้บัตรขนานกับส้นเท้า</div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div>กดปุ่มด้านล่างเพื่อเปิดกล้องและเริ่มสแกน</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-ready" onclick="location.href='scan.html'">
+            ฉันวางบัตรเรียบร้อยแล้ว
+        </button>
+    </main>
+
+    <footer>
+        Computer Science, RMUTT | © 2026 ShoeSpace Project
+    </footer>
+
+</body>
+</html>

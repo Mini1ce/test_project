@@ -4,128 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIFit AR - Select Price</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Kanit', sans-serif; }
-        
-        body { 
-            background-color: #ffffff; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden; 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', 'Kanit', sans-serif;
+            background: linear-gradient(160deg, #EEF2FF 0%, #F0FBFF 50%, #F5F0FF 100%);
+            height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
-
-        header { 
-            padding: 10px 5%; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #f0f0f0;
+        body::before {
+            content: ''; position: fixed; bottom: -100px; right: -100px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 0;
         }
-        .logo { color: #00008B; font-size: 22px; font-weight: bold; }
-
-        .nav-bar { padding: 8px 5%; cursor: pointer; color: #555; font-size: 14px; }
-
-        main { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: space-evenly; 
-            padding: 10px 5%; 
-        }
-
-        .text-group h2 { color: #1A237E; font-size: 24px; margin-bottom: 5px; }
-        .text-group p { color: #666; font-size: 14px; }
-
-        /* ส่วนเลือกราคาแบบ List */
-        .price-options {
-            width: 100%;
-            max-width: 400px;
+        header {
+            padding: 20px 6%;
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(59,95,219,0.1) 0%, rgba(139,92,246,0.08) 100%);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(79,126,245,0.2);
+            position: relative; z-index: 10;
         }
-
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #4F7EF5 30%, #8B5CF6 60%, #06B6D4 85%, transparent 100%);
+        }
+        .logo {
+            background: linear-gradient(135deg, #3B5FDB, #8B5CF6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; font-size: 22px; font-weight: 700;
+        }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; background: linear-gradient(135deg, #EEF2FF, #F0FBFF); color: #4F7EF5; border: 1px solid rgba(79,126,245,0.2); }
+        .nav-bar {
+            padding: 12px 6%; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; color: #5B6490; font-size: 14px; font-weight: 500;
+            background: rgba(255,255,255,0.5); backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(79,126,245,0.05); position: relative; z-index: 5;
+        }
+        .nav-bar:hover { color: #4F7EF5; }
+        main {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: space-evenly;
+            padding: 20px 6%; position: relative; z-index: 1;
+        }
+        .text-group { text-align: center; }
+        .text-group h2 { color: #1A1F4E; font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+        .text-group p { color: #5B6490; font-size: 14px; }
+        .price-options { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 10px; }
         .price-card {
-            background: #f8fbff;
-            border: 1.5px solid #eef2f6;
-            border-radius: 15px;
-            padding: 18px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 18px;
-            font-weight: 500;
-            color: #333;
+            background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(238,242,255,0.8));
+            border: 1.5px solid rgba(79,126,245,0.12);
+            border-radius: 16px; padding: 16px;
+            text-align: center; cursor: pointer; transition: all 0.25s;
+            font-size: 16px; font-weight: 500; color: #3B4A8A;
+            backdrop-filter: blur(8px);
         }
-
-        .price-card:hover, .price-card.active {
-            border-color: #6495ED;
-            background: #e3f2fd;
-            color: #1A237E;
+        .price-card:hover {
+            border-color: rgba(79,126,245,0.35);
             transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(79,126,245,0.12);
         }
-
-        /* ปุ่มวิเคราะห์ */
+        .price-card.active {
+            border-color: #4F7EF5;
+            background: linear-gradient(135deg, rgba(79,126,245,0.12), rgba(139,92,246,0.1));
+            color: #1A1F4E; font-weight: 600;
+            box-shadow: 0 4px 16px rgba(79,126,245,0.2);
+        }
+        .price-card.active::before { content: '✓ '; color: #4F7EF5; }
         .btn-analyze {
-            width: 100%;
-            max-width: 350px;
-            background: #6495ED;
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 40px;
-            font-size: 18px;
-            font-weight: bold;
+            width: 100%; max-width: 350px;
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            color: white; border: none; padding: 16px; border-radius: 40px;
+            font-size: 17px; font-weight: 600; font-family: 'Outfit', sans-serif;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(100, 149, 237, 0.3);
+            box-shadow: 0 8px 24px rgba(79,126,245,0.35);
+            transition: all 0.3s;
         }
-
-        footer { 
-            background: #E5E5E5; 
-            padding: 10px; 
-            text-align: center; 
-            font-size: 11px; 
-            color: #777; 
+        .btn-analyze:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(79,126,245,0.45); }
+        footer {
+            position: relative;
+            background: linear-gradient(135deg, rgba(59,95,219,0.1), rgba(139,92,246,0.08));
+            backdrop-filter: blur(8px);
+            border-top: 2px solid rgba(79,126,245,0.15);
+            padding: 18px; text-align: center; color: #4F6AC0; font-size: 12px;
+            font-weight: 500;
+            position: relative; z-index: 1;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4F7EF5, #8B5CF6, #06B6D4, transparent);
         }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo">AIFit AR</div>
-        <div class="tech-logos" style="font-size: 12px;">✨ Gemini 🔥 Firebase</div>
+        <div class="badge">✨ Gemini &nbsp;🔥 Firebase</div>
     </header>
-
     <div class="nav-bar" onclick="window.history.back()">◀ ย้อนกลับ</div>
-
     <main>
         <div class="text-group">
             <h2>งบประมาณของคุณ</h2>
             <p>เลือกช่วงราคาเพื่อให้ AI แนะนำได้แม่นยำขึ้น</p>
         </div>
-
         <div class="price-options">
             <div class="price-card" onclick="selectPrice(this)">ต่ำกว่า 2,000 บาท</div>
             <div class="price-card" onclick="selectPrice(this)">2,000 - 4,000 บาท</div>
             <div class="price-card active" onclick="selectPrice(this)">4,000 - 6,000 บาท</div>
             <div class="price-card" onclick="selectPrice(this)">6,000 บาทขึ้นไป</div>
         </div>
-
-        <button class="btn-analyze" onclick="location.href='rec.html'">
-            วิเคราะห์ผลลัพธ์
-        </button>
+        <button class="btn-analyze" onclick="location.href='rec.html'">วิเคราะห์ผลลัพธ์ →</button>
     </main>
-
-    <footer>
-        Computer Science, RMUTT | © 2026 ShoeSpace Project
-    </footer>
-
+    <footer>Computer Science, RMUTT | © 2026 ShoeSpace Project</footer>
     <script>
-        function selectPrice(element) {
-            document.querySelectorAll('.price-card').forEach(card => card.classList.remove('active'));
-            element.classList.add('active');
+        function selectPrice(el) {
+            document.querySelectorAll('.price-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
         }
     </script>
 </body>

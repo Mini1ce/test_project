@@ -4,110 +4,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIFit AR - AI Advisor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Kanit', sans-serif; }
-        body { background-color: #f5f7fa; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        /* Header */
-        header { padding: 20px 5%; background: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
-        .logo { color: #00008B; font-size: 24px; font-weight: bold; }
-        .nav-bar { padding: 15px 5%; display: flex; align-items: center; gap: 10px; cursor: pointer; background: white; }
-
-        /* Chat Container */
-        main { flex: 1; display: flex; flex-direction: column; padding: 20px 5%; max-width: 800px; margin: 0 auto; width: 100%; }
-        
-        .chat-box { flex: 1; display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; overflow-y: auto; }
-
-        /* Bubble Styles */
-        .message { max-width: 80%; padding: 12px 18px; border-radius: 20px; font-size: 15px; line-height: 1.5; }
-        .ai-msg { background: #E3F2FD; color: #1A237E; align-self: flex-start; border-bottom-left-radius: 5px; border: 1px solid #bbdefb; }
-        .user-msg { background: #6495ED; color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
-
-        /* Input Area */
-        .chat-input-area { display: flex; gap: 10px; background: white; padding: 15px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        input { flex: 1; border: none; outline: none; padding: 5px 10px; font-size: 16px; }
-        .btn-send { background: #6495ED; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; }
-
-        footer { padding: 15px; text-align: center; color: #999; font-size: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', 'Kanit', sans-serif;
+            background: linear-gradient(160deg, #EEF2FF 0%, #F0FBFF 50%, #F5F0FF 100%);
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+        body::before {
+            content: ''; position: fixed; top: -100px; right: -100px;
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 0;
+        }
+        header {
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(59,95,219,0.1) 0%, rgba(139,92,246,0.08) 100%);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(79,126,245,0.2);
+            position: relative; z-index: 10;
+        }
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #4F7EF5 30%, #8B5CF6 60%, #06B6D4 85%, transparent 100%);
+        }
+        .logo {
+            background: linear-gradient(135deg, #3B5FDB, #8B5CF6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; font-size: 22px; font-weight: 700;
+        }
+        .powered-by {
+            background: linear-gradient(135deg, rgba(79,126,245,0.1), rgba(139,92,246,0.1));
+            border: 1px solid rgba(79,126,245,0.2);
+            color: #4F7EF5; font-size: 12px; font-weight: 600;
+            padding: 5px 14px; border-radius: 20px;
+        }
+        .nav-bar {
+            padding: 12px 6%; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; color: #5B6490; font-size: 14px; font-weight: 500;
+            background: rgba(255,255,255,0.5); backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(79,126,245,0.05); position: relative; z-index: 5;
+        }
+        .nav-bar:hover { color: #4F7EF5; }
+        main {
+            flex: 1; display: flex; flex-direction: column;
+            padding: 20px 6%; max-width: 800px; margin: 0 auto; width: 100%;
+            position: relative; z-index: 1;
+        }
+        .chat-box {
+            flex: 1; display: flex; flex-direction: column; gap: 14px;
+            margin-bottom: 18px; overflow-y: auto; padding-right: 4px;
+        }
+        .message { max-width: 82%; padding: 12px 18px; border-radius: 20px; font-size: 15px; line-height: 1.55; }
+        .ai-msg {
+            background: linear-gradient(145deg, rgba(255,255,255,0.92), rgba(238,242,255,0.88));
+            color: #1A1F4E; align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(79,126,245,0.15);
+            box-shadow: 0 2px 12px rgba(79,126,245,0.08);
+            backdrop-filter: blur(8px);
+        }
+        .user-msg {
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            color: white; align-self: flex-end;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 4px 16px rgba(79,126,245,0.3);
+        }
+        .chat-input-area {
+            display: flex; gap: 10px;
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(12px);
+            padding: 12px 16px; border-radius: 30px;
+            box-shadow: 0 4px 20px rgba(79,126,245,0.1);
+            border: 1px solid rgba(79,126,245,0.12);
+        }
+        input {
+            flex: 1; border: none; outline: none; padding: 4px 8px;
+            font-size: 15px; font-family: 'Outfit', sans-serif;
+            background: transparent; color: #1A1F4E;
+        }
+        input::placeholder { color: #A0AAC8; }
+        .btn-send {
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            color: white; border: none; padding: 10px 22px;
+            border-radius: 20px; font-weight: 600; font-size: 14px;
+            font-family: 'Outfit', sans-serif;
+            cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(79,126,245,0.3);
+        }
+        .btn-send:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(79,126,245,0.4); }
+        footer {
+            position: relative;
+            background: linear-gradient(135deg, rgba(59,95,219,0.1), rgba(139,92,246,0.08));
+            backdrop-filter: blur(8px);
+            border-top: 2px solid rgba(79,126,245,0.15);
+            padding: 18px; text-align: center; color: #4F6AC0; font-size: 12px;
+            font-weight: 500;
+            position: relative; z-index: 1;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4F7EF5, #8B5CF6, #06B6D4, transparent);
+        }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo">AIFit AR</div>
-        <div class="tech-logos" style="color: #666; font-size: 14px;">Powered by Gemini ✦</div>
+        <div class="powered-by">Powered by Gemini ✦</div>
     </header>
-
-    <div class="nav-bar" onclick="window.history.back()">
-        <span style="font-size: 20px;">◀</span> ย้อนกลับ
-    </div>
-
+    <div class="nav-bar" onclick="window.history.back()">◀ ย้อนกลับ</div>
     <main>
         <div class="chat-box" id="chatBox">
             <div class="message ai-msg">
                 สวัสดีครับ! ผมคือ AI Advisor ยินดีที่ได้แนะนำรองเท้า Asics Gel-Kayano 30 ให้คุณครับ มีคำถามเพิ่มเติมเกี่ยวกับไซส์หรือการใช้งานไหมครับ?
             </div>
         </div>
-
         <div class="chat-input-area">
             <input type="text" id="userInput" placeholder="พิมพ์คำถามของคุณที่นี่...">
             <button class="btn-send" onclick="sendMessage()">ส่ง</button>
         </div>
     </main>
-
-    <footer>
-        Computer Science, RMUTT | © 2026 ShoeSpace Project
-    </footer>
-
+    <footer>Computer Science, RMUTT | © 2026 ShoeSpace Project</footer>
     <script>
-       function sendMessage() {
-    const input = document.getElementById('userInput');
-    const chatBox = document.getElementById('chatBox');
-    const userText = input.value.trim();
-
-    if (userText !== "") {
-        // 1. แสดงข้อความของ User
-        const userDiv = document.createElement('div');
-        userDiv.className = 'message user-msg';
-        userDiv.textContent = userText;
-        chatBox.appendChild(userDiv);
-        
-        // 2. แสดงสถานะ "กำลังวิเคราะห์" (หลังจาก 1 วินาที)
-        setTimeout(() => {
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'message ai-msg';
-            loadingDiv.id = 'loading-status';
-            loadingDiv.textContent = "กำลังวิเคราะห์คำถามของคุณด้วย Gemini AI...";
-            chatBox.appendChild(loadingDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }, 1000);
-
-        // 3. แสดงคำตอบจริง (หลังจาก 4 วินาที - ปรับเวลาให้กระชับขึ้น)
-        setTimeout(() => {
-            // ลบสถานะ "กำลังวิเคราะห์" ออกก่อนแสดงคำตอบ
-            const loadingStatus = document.getElementById('loading-status');
-            if (loadingStatus) loadingStatus.remove();
-
-            const aiDiv = document.createElement('div');
-            aiDiv.className = 'message ai-msg';
-            
-            // Logic การตอบคำถามเบื้องต้น (Mockup)
-            if (userText.includes("นุ่ม")) {
-                aiDiv.textContent = "นุ่มแน่นอนครับ! เนื่องจากพื้นรองเท้า Asics รุ่นนี้มีเทคโนโลยี PureGEL™ ที่ช่วยดูดซับแรงกระแทกได้ดีเยี่ยม เหมาะสำหรับการวิ่งระยะไกลและช่วยลดความเมื่อยล้าตามสรีระเท้าของคุณครับ";
-            } else if (userText.includes("ราคา") || userText.includes("กี่บาท")) {
-                aiDiv.textContent = "ข้อมูลราคาจะถูกดึงมาจาก Firebase ของเราครับ เบื้องต้นรุ่นนี้ราคาประมาณ 6,xxx บาท คุณสามารถเช็คโปรโมชั่นล่าสุดได้ที่ปุ่มดูรองเท้าครับ";
-            } else {
-                aiDiv.textContent = "เป็นคำถามที่ดีครับ! จากสัดส่วนเท้ากว้าง 10.2 ซม. ของคุณ รุ่นนี้ถูกออกแบบมาเพื่อความสบายเป็นหลัก มีข้อสงสัยส่วนไหนเพิ่มเติมไหมครับ?";
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const chatBox = document.getElementById('chatBox');
+            const userText = input.value.trim();
+            if (userText !== "") {
+                const userDiv = document.createElement('div');
+                userDiv.className = 'message user-msg';
+                userDiv.textContent = userText;
+                chatBox.appendChild(userDiv);
+                setTimeout(() => {
+                    const loadingDiv = document.createElement('div');
+                    loadingDiv.className = 'message ai-msg';
+                    loadingDiv.id = 'loading-status';
+                    loadingDiv.textContent = "กำลังวิเคราะห์คำถามของคุณด้วย Gemini AI...";
+                    chatBox.appendChild(loadingDiv);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 800);
+                setTimeout(() => {
+                    const loadingStatus = document.getElementById('loading-status');
+                    if (loadingStatus) loadingStatus.remove();
+                    const aiDiv = document.createElement('div');
+                    aiDiv.className = 'message ai-msg';
+                    if (userText.includes("นุ่ม")) {
+                        aiDiv.textContent = "นุ่มแน่นอนครับ! เนื่องจากพื้นรองเท้า Asics รุ่นนี้มีเทคโนโลยี PureGEL™ ที่ช่วยดูดซับแรงกระแทกได้ดีเยี่ยม เหมาะสำหรับการวิ่งระยะไกลและช่วยลดความเมื่อยล้าตามสรีระเท้าของคุณครับ";
+                    } else if (userText.includes("ราคา") || userText.includes("กี่บาท")) {
+                        aiDiv.textContent = "ข้อมูลราคาจะถูกดึงมาจาก Firebase ของเราครับ เบื้องต้นรุ่นนี้ราคาประมาณ 6,xxx บาท คุณสามารถเช็คโปรโมชั่นล่าสุดได้ที่ปุ่มดูรองเท้าครับ";
+                    } else {
+                        aiDiv.textContent = "เป็นคำถามที่ดีครับ! จากสัดส่วนเท้ากว้าง 10.2 ซม. ของคุณ รุ่นนี้ถูกออกแบบมาเพื่อความสบายเป็นหลัก มีข้อสงสัยส่วนไหนเพิ่มเติมไหมครับ?";
+                    }
+                    chatBox.appendChild(aiDiv);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 3500);
+                input.value = "";
+                chatBox.scrollTop = chatBox.scrollHeight;
             }
-
-            chatBox.appendChild(aiDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }, 4000);
-
-        input.value = "";
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-}
+        }
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
     </script>
 </body>
 </html>

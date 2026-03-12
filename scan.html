@@ -4,161 +4,175 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIFit AR - Scanning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Kanit', sans-serif;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background-color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Outfit', 'Kanit', sans-serif;
+            background: linear-gradient(160deg, #EEF2FF 0%, #F0FBFF 50%, #F5F0FF 100%);
+            min-height: 100vh; display: flex; flex-direction: column;
         }
-
-        /* Header */
         header {
-            padding: 20px 5%;
+            padding: 20px 6%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: linear-gradient(135deg, rgba(59,95,219,0.1) 0%, rgba(139,92,246,0.08) 100%);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(79,126,245,0.2);
+            position: relative; z-index: 10;
         }
-
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, #4F7EF5 30%, #8B5CF6 60%, #06B6D4 85%, transparent 100%);
+        }
         .logo {
-            color: #00008B;
-            font-size: 28px;
-            font-weight: bold;
+            background: linear-gradient(135deg, #3B5FDB, #8B5CF6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; font-size: 24px; font-weight: 700;
         }
-
-        .tech-logos {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        /* Navigation */
+        .tech-badges { display: flex; gap: 8px; }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-gemini { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
+        .badge-firebase { background: linear-gradient(135deg, #fee2e2, #fecaca); color: #991b1b; }
         .nav-bar {
-            padding: 10px 5%;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            color: #333;
-            font-weight: 500;
+            padding: 14px 6%; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; color: #5B6490; font-size: 15px; font-weight: 500;
+            background: rgba(255,255,255,0.5); backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(79,126,245,0.05); position: relative; z-index: 5;
         }
-
-        /* Scanning Area */
+        .nav-bar:hover { color: #4F7EF5; }
         main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 5%;
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 30px 6%; gap: 30px; position: relative; z-index: 1;
         }
-
         .scan-container {
-            width: 100%;
-            max-width: 600px;
-            height: 500px;
-            background-color: #E0F7FA;
-            border: 2px solid #333;
-            border-radius: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-around;
+            width: 100%; max-width: 560px; height: 460px;
+            background: linear-gradient(145deg, rgba(6,182,212,0.08), rgba(79,126,245,0.12));
+            border-radius: 36px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: space-around;
             padding: 30px;
-            position: relative;
+            position: relative; overflow: hidden;
+            border: 1px solid rgba(79,126,245,0.2);
+            box-shadow: 0 20px 60px rgba(79,126,245,0.12);
+            backdrop-filter: blur(10px);
         }
-
-        .camera-icon {
-            font-size: 50px;
-            margin-bottom: 10px;
+        /* Gradient top bar */
+        .scan-container::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #06B6D4, #4F7EF5, #8B5CF6);
         }
-
+        /* Scan line animation */
+        .scan-container::after {
+            content: '';
+            position: absolute; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(6,182,212,0.8), transparent);
+            animation: scanLine 2.5s ease-in-out infinite;
+            top: 30%;
+        }
+        @keyframes scanLine {
+            0% { top: 20%; opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { top: 85%; opacity: 0; }
+        }
+        .ar-corner-scan {
+            position: absolute; width: 30px; height: 30px;
+            border-color: rgba(79,126,245,0.7); border-style: solid;
+        }
+        .ar-corner-scan.tl { top: 20px; left: 20px; border-width: 2px 0 0 2px; border-radius: 6px 0 0 0; }
+        .ar-corner-scan.tr { top: 20px; right: 20px; border-width: 2px 2px 0 0; border-radius: 0 6px 0 0; }
+        .ar-corner-scan.bl { bottom: 20px; left: 20px; border-width: 0 0 2px 2px; border-radius: 0 0 0 6px; }
+        .ar-corner-scan.br { bottom: 20px; right: 20px; border-width: 0 2px 2px 0; border-radius: 0 0 6px 0; }
+        .camera-badge {
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(6px);
+            border: 1px solid rgba(79,126,245,0.2);
+            color: #4F7EF5; font-size: 13px; font-weight: 600;
+            padding: 6px 16px; border-radius: 20px;
+            display: flex; align-items: center; gap: 6px;
+        }
         .foot-illustration {
-            width: 80%;
-            max-width: 350px;
-            object-fit: contain;
+            width: 80%; max-width: 300px; object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(79,126,245,0.3));
+            position: relative; z-index: 2;
         }
-
         .status-text {
-            font-size: 32px;
-            font-weight: bold;
-            color: #000;
-            margin-top: 20px;
+            font-size: 22px; font-weight: 700;
+            background: linear-gradient(135deg, #3B5FDB, #8B5CF6);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex; align-items: center; gap: 8px;
+            position: relative; z-index: 2;
         }
-
-        /* Control Button */
+        .pulse-dot {
+            width: 10px; height: 10px;
+            background: #06B6D4; border-radius: 50%;
+            animation: pulse 1.2s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
         .btn-next {
-            margin-top: 40px;
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            color: #000;
-            border: 2px solid #6495ED;
-            padding: 18px;
-            border-radius: 50px;
-            font-size: 24px;
-            font-weight: 500;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-            transition: 0.3s;
+            width: 100%; max-width: 400px;
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
+            color: #4F7EF5; border: 1.5px solid rgba(79,126,245,0.4);
+            padding: 18px; border-radius: 50px;
+            font-size: 18px; font-weight: 600; font-family: 'Outfit', sans-serif;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            cursor: pointer; transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(79,126,245,0.1);
         }
-
-        .btn-next:hover {
-            background: #f0f4ff;
-            transform: translateY(-2px);
-        }
-
-        /* Footer */
+        .btn-next:hover { background: linear-gradient(135deg, #4F7EF5, #7B5CF6); color: white; border-color: transparent; transform: translateY(-2px); }
         footer {
-            background: #E5E5E5;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            font-size: 14px;
+            position: relative;
+            background: linear-gradient(135deg, rgba(59,95,219,0.1), rgba(139,92,246,0.08));
+            backdrop-filter: blur(8px);
+            border-top: 2px solid rgba(79,126,245,0.15);
+            padding: 18px; text-align: center; color: #4F6AC0; font-size: 12px;
+            font-weight: 500;
+            position: relative; z-index: 1;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #4F7EF5, #8B5CF6, #06B6D4, transparent);
         }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo">AIFit AR</div>
-        <div class="tech-logos">
-            <span>✨ Gemini</span>
-            <span>🔥 Firebase</span>
+        <div class="tech-badges">
+            <span class="badge badge-gemini">✨ Gemini</span>
+            <span class="badge badge-firebase">🔥 Firebase</span>
         </div>
     </header>
-
-    <div class="nav-bar" onclick="window.history.back()">
-        <span style="font-size: 24px;">◀</span> ย้อนกลับ
-    </div>
-
+    <div class="nav-bar" onclick="window.history.back()">◀ ย้อนกลับ</div>
     <main>
         <div class="scan-container">
-            <div class="camera-icon">📷</div>
-            
+            <div class="ar-corner-scan tl"></div><div class="ar-corner-scan tr"></div>
+            <div class="ar-corner-scan bl"></div><div class="ar-corner-scan br"></div>
+            <div class="camera-badge">📷 กล้อง AR กำลังทำงาน</div>
             <img src="foot.png" alt="Foot Scan Grid" class="foot-illustration">
-            
-            <div class="status-text">กำลังตรวจจับเท้า</div>
+            <div class="status-text">
+                <span class="pulse-dot"></span> กำลังตรวจจับเท้า
+            </div>
         </div>
-
         <button class="btn-next" onclick="window.location.href='purpose.html'">
-            ถัดไป >  
+            ถัดไป →
         </button>
     </main>
-
-    <footer>
-        Computer Science, RMUTT | © 2026 ShoeSpace Project
-    </footer>
-
+    <footer>Computer Science, RMUTT | © 2026 ShoeSpace Project</footer>
 </body>
 </html>

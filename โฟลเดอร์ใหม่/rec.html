@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIFit AR - Result</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'Kanit', sans-serif; }
+        body { background-color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: #00008B; font-size: 28px; font-weight: bold; }
+        .tech-logos { display: flex; gap: 10px; font-weight: 500; }
+
+        .nav-bar { padding: 10px 5%; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+
+        main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px 5%; }
+
+        /* พื้นที่แสดงผล AR Model ที่แนะนำ */
+        .ar-viewport {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            background: #f0f4f8;
+            border-radius: 30px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border: 2px solid #eef2f6;
+        }
+
+        .ar-viewport img { height: 90%; object-fit: contain; }
+
+        /* การ์ดสรุปผลจาก AI */
+        .result-card {
+            width: 100%;
+            max-width: 600px;
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 25px;
+            margin-top: -50px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 10;
+            border: 1px solid #6495ED;
+        }
+
+        .shoe-brand { color: #6495ED; font-weight: bold; font-size: 14px; text-transform: uppercase; }
+        .shoe-name { font-size: 24px; font-weight: bold; color: #1A237E; margin: 5px 0; }
+        
+        .size-box {
+            display: inline-block;
+            background: #E3F2FD;
+            color: #1A237E;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .ai-reasoning {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #6495ED;
+        }
+
+        /* กลุ่มปุ่ม Action */
+        .action-group {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-chat {
+            background: #ffffff;
+            color: #6495ED;
+            border: 2px solid #6495ED;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-chat:hover { background: #f0f4ff; }
+
+        .btn-done {
+            background: #6495ED;
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(100,149,237,0.4);
+        }
+
+        footer { background: #E5E5E5; padding: 20px; text-align: center; color: #666; font-size: 12px; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AIFit AR</div>
+        <div class="tech-logos"><span>✨ Gemini</span> <span>🔥 Firebase</span></div>
+    </header>
+
+    <div class="nav-bar" onclick="window.history.back()">
+        <span style="font-size: 24px;">◀</span> ปรับแต่งตัวเลือกใหม่
+    </div>
+
+    <main>
+        <div class="ar-viewport">
+            <img src="image2.png" alt="AR Visualization">
+        </div>
+
+        <div class="result-card">
+            <p class="shoe-brand">AI Recommended</p>
+            <h2 class="shoe-name">Asics Gel-Kayano 30</h2>
+            
+            <div class="size-box">ไซส์ที่แนะนำ: 42.5 EU (9 US)</div>
+            
+            <div class="ai-reasoning">
+                <strong>วิเคราะห์โดย Gemini:</strong><br>
+                เนื่องจากคุณมีสรีระเท้ากว้าง (10.2 ซม.) และต้องการใช้งานเพื่อการวิ่ง ระบบจึงแนะนำรุ่นที่มี Support หน้าเท้ากว้างเป็นพิเศษ เพื่อลดการบีบรัดขณะออกกำลังกาย
+            </div>
+        </div>
+
+        <div class="action-group">
+            <button class="btn-chat" onclick="location.href='chat.html'">
+                💬 สอบถาม AI Advisor เพิ่มเติม
+            </button>
+            <button class="btn-done" onclick="location.href='index.html'">เสร็จสิ้น</button>
+        </div>
+    </main>
+
+    <footer>
+        Computer Science, RMUTT | © 2026 ShoeSpace Project
+    </footer>
+
+</body>
+</html>
