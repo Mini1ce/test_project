@@ -23,7 +23,7 @@
         .instruction-text { font-size: 13px; color: #3B4A8A; line-height: 1.55; }
         .instruction-text strong { color: #4F7EF5; }
         .scan-container {
-            width: 100%; max-width: 560px;
+            width: 100%; width: 620px; height: 460px;
             background: linear-gradient(145deg, rgba(6,182,212,0.07), rgba(79,126,245,0.1));
             border-radius: 28px; display: flex; flex-direction: column;
             align-items: center; justify-content: space-between;
@@ -55,7 +55,7 @@
         }
         .foot-illustration {
             /* Take ~60% width, shrink on small screens */
-            width: 58%; max-width: 200px;
+            width: 55%; max-width: 300px;
             height: auto; object-fit: contain;
             filter: drop-shadow(0 0 20px rgba(79,126,245,0.3));
             flex-shrink: 1;
@@ -66,6 +66,7 @@
             /* push card to sit at bottom-right alongside foot */
             align-self: flex-end;
             margin-bottom: 6px;
+            margin-left: -50px;
         }
         .card-frame-label { font-size: 10px; font-weight: 600; color: #4F7EF5; background: rgba(255,255,255,0.75); backdrop-filter: blur(4px); padding: 3px 8px; border-radius: 10px; border: 1px solid rgba(79,126,245,0.2); white-space: nowrap; }
         .card-placeholder {

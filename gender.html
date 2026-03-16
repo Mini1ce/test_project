@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIFit AR - Select Gender</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Outfit', 'Kanit', sans-serif; 
+            background: linear-gradient(160deg, #EEF2FF 0%, #F0FBFF 50%, #F5F0FF 100%); 
+            min-height: 100vh; display: flex; flex-direction: column; 
+        }
+        body::before { 
+            content: ''; position: fixed; top: -120px; left: -120px; 
+            width: 400px; height: 400px; 
+            background: radial-gradient(circle, rgba(79,126,245,0.08) 0%, transparent 70%); 
+            border-radius: 50%; pointer-events: none; z-index: 0; 
+        }
+
+        header { 
+            padding: 20px 6%; display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); 
+            border-bottom: 1px solid rgba(79,126,245,0.15); position: relative; z-index: 10; 
+        }
+        header::after { 
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; 
+            background: linear-gradient(90deg, transparent, #4F7EF5, #8B5CF6, #06B6D4, transparent); 
+        }
+        .logo { 
+            background: linear-gradient(135deg, #3B5FDB, #8B5CF6); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            background-clip: text; font-size: 24px; font-weight: 700; 
+        }
+
+        .nav-bar { 
+            padding: 12px 6%; display: flex; align-items: center; gap: 6px; 
+            cursor: pointer; color: #5B6490; font-size: 13px; font-weight: 500; 
+            background: rgba(255,255,255,0.4); backdrop-filter: blur(6px); 
+            border-bottom: 1px solid rgba(79,126,245,0.05); position: relative; z-index: 5; 
+        }
+
+        main { 
+            flex: 1; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; padding: 40px 6%; gap: 32px; position: relative; z-index: 1; 
+        }
+        .section-title { color: #1A1F4E; font-size: 26px; font-weight: 700; text-align: center; }
+
+        .gender-grid { 
+            display: grid; grid-template-columns: repeat(2, 1fr); 
+            gap: 20px; width: 100%; max-width: 500px; 
+        }
+        .gender-card {
+            background: rgba(255,255,255,0.85);
+            border: 1.5px solid rgba(79,126,245,0.12);
+            border-radius: 24px; padding: 35px 20px;
+            text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(79,126,245,0.05);
+        }
+        .gender-card:hover { 
+            transform: translateY(-8px); 
+            border-color: rgba(79,126,245,0.4);
+            box-shadow: 0 15px 30px rgba(79,126,245,0.12);
+        }
+        .gender-card.active {
+            border-color: #4F7EF5;
+            background: linear-gradient(145deg, #ffffff, #f0f4ff);
+            transform: scale(1.05);
+            box-shadow: 0 12px 28px rgba(79,126,245,0.2);
+        }
+        .gender-icon { font-size: 50px; margin-bottom: 15px; display: block; }
+        .gender-label { font-size: 18px; font-weight: 600; color: #1A1F4E; }
+        .gender-card.active .gender-label { color: #4F7EF5; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            color: white; border: none; padding: 16px 50px; border-radius: 18px;
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(79,126,245,0.35);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(79,126,245,0.45); }
+
+        footer { 
+            padding: 16px; text-align: center; color: #8892B5; font-size: 11px; 
+            border-top: 1px solid rgba(79,126,245,0.1); background: rgba(255,255,255,0.5); 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">AIFit AR</div>
+    </header>
+    <div class="nav-bar" onclick="window.history.back()">◀ ย้อนกลับ</div>
+    <main>
+        <div class="section-title">ระบุเพศของคุณ</div>
+        <div class="gender-grid">
+            <div class="gender-card" onclick="selectGender(this)">
+                <span class="gender-icon">👨</span>
+                <span class="gender-label">ชาย</span>
+            </div>
+            <div class="gender-card" onclick="selectGender(this)">
+                <span class="gender-icon">👩</span>
+                <span class="gender-label">หญิง</span>
+            </div>
+        </div>
+        <button class="btn-primary" onclick="location.href='scan.html'">ถัดไป →</button>
+    </main>
+    <footer>Computer Science, RMUTT | © 2026 ShoeSpace Project</footer>
+    <script>
+        function selectGender(el) {
+            document.querySelectorAll('.gender-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+        }
+    </script>
+</body>
+</html>
