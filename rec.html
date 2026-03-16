@@ -8,6 +8,7 @@
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Outfit', 'Kanit', sans-serif;
             background: linear-gradient(160deg, #EEF2FF 0%, #F0FBFF 50%, #F5F0FF 100%);
@@ -19,17 +20,18 @@
             background: radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%);
             border-radius: 50%; pointer-events: none; z-index: 0;
         }
+
+        /* ── HEADER ── */
         header {
-            padding: 20px 6%; display: flex; justify-content: space-between; align-items: center;
-            background: linear-gradient(135deg, rgba(59,95,219,0.1) 0%, rgba(139,92,246,0.08) 100%);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(79,126,245,0.2);
+            padding: 18px 6%; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(79,126,245,0.15);
             position: relative; z-index: 10;
         }
         header::after {
-            content: '';
-            position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent 0%, #4F7EF5 30%, #8B5CF6 60%, #06B6D4 85%, transparent 100%);
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #4F7EF5, #8B5CF6, #06B6D4, transparent);
         }
         .logo {
             background: linear-gradient(135deg, #3B5FDB, #8B5CF6);
@@ -37,143 +39,303 @@
             background-clip: text; font-size: 24px; font-weight: 700;
         }
         .tech-badges { display: flex; gap: 8px; }
-        .badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge { padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
         .badge-gemini { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; }
         .badge-firebase { background: linear-gradient(135deg, #fee2e2, #fecaca); color: #991b1b; }
+
         .nav-bar {
-            padding: 14px 6%; display: flex; align-items: center; gap: 8px;
-            cursor: pointer; color: #5B6490; font-size: 15px; font-weight: 500;
-            background: rgba(255,255,255,0.5); backdrop-filter: blur(6px);
+            padding: 12px 6%; display: flex; align-items: center; gap: 6px;
+            cursor: pointer; color: #5B6490; font-size: 13px; font-weight: 500;
+            background: rgba(255,255,255,0.4); backdrop-filter: blur(6px);
             border-bottom: 1px solid rgba(79,126,245,0.05); position: relative; z-index: 5;
+            transition: color 0.2s;
         }
         .nav-bar:hover { color: #4F7EF5; }
 
+        /* ── MAIN ── */
         main {
             flex: 1; display: flex; flex-direction: column;
-            align-items: center; padding: 24px 6%; gap: 0;
+            align-items: center; padding: 24px 6% 100px; gap: 0;
             position: relative; z-index: 1;
         }
 
-        /* 3D Viewer */
+        /* ── 3D VIEWER ── */
         .viewer-wrapper {
             width: 100%; max-width: 780px;
             background: linear-gradient(145deg, rgba(238,242,255,0.92), rgba(224,240,255,0.85));
-            border-radius: 32px 32px 0 0;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(79,126,245,0.15);
-            border-bottom: none;
+            border-radius: 28px 28px 0 0;
+            position: relative; overflow: hidden;
+            border: 1px solid rgba(79,126,245,0.15); border-bottom: none;
         }
         .viewer-wrapper::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, #06B6D4, #4F7EF5, #8B5CF6);
-            z-index: 5;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #06B6D4, #4F7EF5, #8B5CF6); z-index: 5;
         }
         .ar-live-badge {
-            position: absolute; top: 16px; right: 16px; z-index: 10;
-            background: rgba(239,68,68,0.12); color: #ef4444;
-            border: 1px solid rgba(239,68,68,0.3);
-            font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+            position: absolute; top: 14px; right: 14px; z-index: 10;
+            background: rgba(239,68,68,0.1); color: #ef4444;
+            border: 1px solid rgba(239,68,68,0.25);
+            font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
             padding: 4px 10px; border-radius: 20px;
         }
         .ar-corner {
-            position: absolute; width: 28px; height: 28px;
-            border-color: rgba(79,126,245,0.5); border-style: solid; z-index: 10;
+            position: absolute; width: 24px; height: 24px;
+            border-color: rgba(79,126,245,0.45); border-style: solid; z-index: 10;
         }
-        .ar-corner.tl { top: 16px; left: 16px; border-width: 2px 0 0 2px; border-radius: 6px 0 0 0; }
-        .ar-corner.tr { top: 16px; right: 55px; border-width: 2px 2px 0 0; border-radius: 0 6px 0 0; }
-        .ar-corner.bl { bottom: 16px; left: 16px; border-width: 0 0 2px 2px; border-radius: 0 0 0 6px; }
-        .ar-corner.br { bottom: 16px; right: 16px; border-width: 0 2px 2px 0; border-radius: 0 0 6px 0; }
-
-        model-viewer {
-            width: 100%;
-            height: 380px;
-            background: transparent;
-            --poster-color: transparent;
-        }
-
+        .ar-corner.tl { top: 14px; left: 14px; border-width: 2px 0 0 2px; border-radius: 6px 0 0 0; }
+        .ar-corner.tr { top: 14px; right: 50px; border-width: 2px 2px 0 0; border-radius: 0 6px 0 0; }
+        .ar-corner.bl { bottom: 14px; left: 14px; border-width: 0 0 2px 2px; border-radius: 0 0 0 6px; }
+        .ar-corner.br { bottom: 14px; right: 14px; border-width: 0 2px 2px 0; border-radius: 0 0 6px 0; }
+        model-viewer { width: 100%; height: 360px; background: transparent; --poster-color: transparent; }
         .hint-text {
-            position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
-            background: rgba(255,255,255,0.75); backdrop-filter: blur(6px);
-            color: #5B6490; font-size: 12px; font-weight: 500;
-            padding: 5px 14px; border-radius: 20px;
-            border: 1px solid rgba(79,126,245,0.15);
-            white-space: nowrap; z-index: 10;
-            pointer-events: none;
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(6px);
+            color: #5B6490; font-size: 11px; font-weight: 500;
+            padding: 4px 14px; border-radius: 20px;
+            border: 1px solid rgba(79,126,245,0.12);
+            white-space: nowrap; z-index: 10; pointer-events: none;
         }
 
-        /* Result Card */
+        /* ── RESULT CARD ── */
         .result-card {
             width: 100%; max-width: 780px;
-            background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(238,242,255,0.9));
-            border-radius: 0 0 28px 28px;
-            padding: 22px 28px;
-            box-shadow: 0 16px 48px rgba(79,126,245,0.12);
-            border: 1px solid rgba(79,126,245,0.12);
-            border-top: none;
+            background: rgba(255,255,255,0.92);
+            border-radius: 0 0 24px 24px;
+            padding: 20px 26px 24px;
+            box-shadow: 0 12px 40px rgba(79,126,245,0.1);
+            border: 1px solid rgba(79,126,245,0.1); border-top: none;
             backdrop-filter: blur(10px);
         }
         .shoe-brand {
             background: linear-gradient(135deg, #4F7EF5, #8B5CF6);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px;
+            font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 2px;
         }
-        .shoe-name { font-size: 22px; font-weight: 700; color: #1A1F4E; margin: 4px 0 12px; }
+        .shoe-name { font-size: 21px; font-weight: 700; color: #1A1F4E; margin: 4px 0 12px; }
         .size-box {
-            display: inline-block;
-            background: linear-gradient(135deg, rgba(79,126,245,0.12), rgba(139,92,246,0.1));
-            color: #3B5FDB; padding: 8px 20px; border-radius: 12px;
-            font-size: 16px; font-weight: 700; margin-bottom: 14px;
-            border: 1px solid rgba(79,126,245,0.2);
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(135deg, rgba(79,126,245,0.1), rgba(139,92,246,0.08));
+            color: #3B5FDB; padding: 8px 18px; border-radius: 12px;
+            font-size: 15px; font-weight: 700; margin-bottom: 14px;
+            border: 1px solid rgba(79,126,245,0.18);
         }
         .ai-reasoning {
-            font-size: 13px; color: #5B6490; line-height: 1.65;
-            background: rgba(255,255,255,0.6);
+            font-size: 13px; color: #5B6490; line-height: 1.7;
+            background: rgba(248,250,255,0.8);
             padding: 14px 16px; border-radius: 12px;
             border-left: 3px solid #4F7EF5;
         }
 
+        /* ── ACTION BUTTONS (modern) ── */
         .action-group {
-            width: 100%; max-width: 500px;
-            display: flex; flex-direction: column; gap: 12px;
-            margin-top: 24px;
+            width: 100%; max-width: 780px;
+            display: flex; gap: 12px;
+            justify-content: center;
+            margin-top: 16px;
         }
-        .btn-chat {
-            background: rgba(255,255,255,0.85); backdrop-filter: blur(8px);
-            color: #4F7EF5; border: 1.5px solid rgba(79,126,245,0.3);
-            padding: 16px; border-radius: 50px;
-            font-size: 16px; font-weight: 600; font-family: 'Outfit', sans-serif;
-            cursor: pointer;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
-            transition: all 0.3s;
-        }
-        .btn-chat:hover { background: linear-gradient(135deg, rgba(79,126,245,0.1), rgba(139,92,246,0.1)); transform: translateY(-2px); }
-        .btn-done {
-            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
-            color: white; border: none; padding: 16px; border-radius: 50px;
-            font-size: 16px; font-weight: 600; font-family: 'Outfit', sans-serif;
-            cursor: pointer;
-            box-shadow: 0 8px 24px rgba(79,126,245,0.35);
-            transition: all 0.3s;
-        }
-        .btn-done:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(79,126,245,0.45); }
 
+        /* Pill ghost button */
+        
+        
+        
+        
+        
+
+        /* ── FOOTER ── */
         footer {
             position: relative;
-            background: linear-gradient(135deg, rgba(59,95,219,0.1), rgba(139,92,246,0.08));
+            background: rgba(255,255,255,0.5);
             backdrop-filter: blur(8px);
-            border-top: 2px solid rgba(79,126,245,0.15);
-            padding: 18px; text-align: center; color: #4F6AC0; font-size: 12px;
+            border-top: 1px solid rgba(79,126,245,0.1);
+            padding: 16px; text-align: center; color: #8892B5; font-size: 11px;
             font-weight: 500; z-index: 1; margin-top: auto;
         }
-        footer::before {
-            content: '';
-            position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, #4F7EF5, #8B5CF6, #06B6D4, transparent);
+
+        /* ══════════════════════════════════════════
+           CHAT POPUP — bottom-right
+        ══════════════════════════════════════════ */
+
+        /* FAB trigger button */
+        .chat-fab {
+            position: fixed; bottom: 28px; right: 28px; z-index: 200;
+            width: 58px; height: 58px; border-radius: 50%;
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 6px 24px rgba(79,126,245,0.45);
+            transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            color: white; font-size: 22px;
         }
-    </style>
+        .chat-fab:hover { transform: scale(1.1); box-shadow: 0 10px 32px rgba(79,126,245,0.55); }
+        .chat-fab.open { transform: rotate(45deg) scale(0.9); background: linear-gradient(135deg, #ef4444, #f97316); }
+
+        /* Notification dot */
+        .chat-fab .notif {
+            position: absolute; top: 6px; right: 6px;
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #22D3EE; border: 2px solid white;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0%,100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.7; }
+        }
+
+        /* Tooltip label beside FAB */
+        .chat-fab-label {
+            position: fixed; bottom: 38px; right: 98px; z-index: 199;
+            background: rgba(26,31,78,0.88); backdrop-filter: blur(8px);
+            color: white; font-size: 12px; font-weight: 600;
+            padding: 6px 14px; border-radius: 20px;
+            white-space: nowrap; pointer-events: none;
+            opacity: 1; transition: opacity 0.3s;
+        }
+        .chat-fab-label.hidden { opacity: 0; }
+
+        /* Popup window */
+        .chat-popup {
+            position: fixed; bottom: 100px; right: 28px; z-index: 200;
+            width: 400px; height: 500px;
+            background: rgba(255,255,255,0.97);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(79,126,245,0.2), 0 4px 16px rgba(0,0,0,0.08);
+            border: 1px solid rgba(79,126,245,0.12);
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.88) translateY(20px);
+            transform-origin: bottom right;
+            opacity: 0; pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .chat-popup.open {
+            transform: scale(1) translateY(0);
+            opacity: 1; pointer-events: all;
+        }
+
+        /* Popup header */
+        .popup-header {
+            padding: 14px 18px;
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .popup-header-left { display: flex; align-items: center; gap: 10px; }
+        .popup-avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+        }
+        .popup-title { color: white; font-size: 14px; font-weight: 700; }
+        .popup-subtitle { color: rgba(255,255,255,0.75); font-size: 11px; margin-top: 1px; }
+        .popup-close {
+            background: rgba(255,255,255,0.15); border: none; color: white;
+            width: 28px; height: 28px; border-radius: 50%;
+            font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .popup-close:hover { background: rgba(255,255,255,0.25); }
+
+        /* Popup chat messages */
+        .popup-messages {
+            flex: 1; overflow-y: auto; padding: 14px 14px 8px;
+            display: flex; flex-direction: column; gap: 10px;
+            scrollbar-width: thin; scrollbar-color: rgba(79,126,245,0.2) transparent;
+        }
+        .popup-messages::-webkit-scrollbar { width: 4px; }
+        .popup-messages::-webkit-scrollbar-thumb { background: rgba(79,126,245,0.2); border-radius: 4px; }
+
+        .p-msg { max-width: 88%; font-size: 13px; line-height: 1.55; padding: 9px 13px; border-radius: 16px; }
+        .p-ai {
+            background: #F0F4FF; color: #1A1F4E;
+            border-bottom-left-radius: 4px;
+            align-self: flex-start;
+            border: 1px solid rgba(79,126,245,0.1);
+        }
+        .p-user {
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            color: white; align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .p-typing {
+            background: #F0F4FF; border: 1px solid rgba(79,126,245,0.1);
+            align-self: flex-start; padding: 10px 16px; border-radius: 16px;
+            border-bottom-left-radius: 4px;
+        }
+        .typing-dots { display: flex; gap: 4px; align-items: center; }
+        .typing-dots span {
+            width: 6px; height: 6px; border-radius: 50%; background: #4F7EF5;
+            animation: bounce 1.2s infinite;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce {
+            0%,60%,100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-5px); opacity: 1; }
+        }
+
+        /* Popup input */
+        .popup-input-area {
+            padding: 10px 12px 12px;
+            border-top: 1px solid rgba(79,126,245,0.08);
+            background: rgba(248,250,255,0.9);
+            display: flex; gap: 8px; align-items: center;
+        }
+        .popup-input {
+            flex: 1; border: 1px solid rgba(79,126,245,0.15); outline: none;
+            background: white; border-radius: 20px;
+            padding: 9px 14px; font-size: 13px;
+            font-family: 'Outfit', sans-serif; color: #1A1F4E;
+            transition: border-color 0.2s;
+        }
+        .popup-input:focus { border-color: rgba(79,126,245,0.4); }
+        .popup-input::placeholder { color: #A0AAC8; }
+        .popup-send {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            border: none; cursor: pointer; color: white; font-size: 14px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(79,126,245,0.3);
+        }
+        .popup-send:hover { transform: scale(1.1); }
+        .popup-send:active { transform: scale(0.95); }
+
+        /* Quick reply chips */
+        .quick-chips {
+            padding: 6px 14px 0;
+            display: flex; gap: 6px; flex-wrap: wrap;
+        }
+        .chip {
+            background: rgba(79,126,245,0.08);
+            color: #4F7EF5; border: 1px solid rgba(79,126,245,0.2);
+            border-radius: 20px; padding: 4px 12px;
+            font-size: 11px; font-weight: 600; cursor: pointer;
+            transition: all 0.15s; white-space: nowrap;
+            font-family: 'Outfit', sans-serif;
+        }
+        .chip:hover { background: rgba(79,126,245,0.15); transform: translateY(-1px); }
+
+        @media (max-width: 480px) {
+            .chat-popup { width: calc(100vw - 24px); right: 12px; bottom: 90px; }
+            .chat-fab { bottom: 20px; right: 16px; }
+            .chat-fab-label { right: 84px; bottom: 30px; }
+        }
+            /* ── SHARED BUTTON ── */
+        .btn-primary {
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #4F7EF5, #7B5CF6);
+            color: white; border: none;
+            padding: 15px 28px; border-radius: 16px;
+            font-size: 16px; font-weight: 600; font-family: 'Outfit', sans-serif;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(79,126,245,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+        }
+        .btn-primary::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent); pointer-events: none; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(79,126,245,0.45), inset 0 1px 0 rgba(255,255,255,0.15); }
+        .btn-primary:active { transform: translateY(0); }
+        </style>
 </head>
 <body>
     <header>
@@ -192,29 +354,24 @@
             <div class="ar-corner bl"></div>
             <div class="ar-corner br"></div>
             <div class="ar-live-badge">AR · 3D</div>
-
             <model-viewer
                 src="shoe.glb"
                 alt="Asics Gel-Kayano 30"
-                auto-rotate
-                camera-controls
-                shadow-intensity="1.2"
-                exposure="1.1"
-                shadow-softness="0.8"
+                auto-rotate camera-controls
+                shadow-intensity="1.2" exposure="1.1" shadow-softness="0.8"
                 rotation-per-second="30deg"
                 camera-orbit="0deg 75deg 2.5m"
                 min-camera-orbit="auto auto 1m"
                 max-camera-orbit="auto auto 4m"
-                style="background: transparent;"
-            ></model-viewer>
-
+                style="background: transparent;">
+            </model-viewer>
             <div class="hint-text">👆 ลากเพื่อหมุน · Pinch เพื่อซูม</div>
         </div>
 
         <div class="result-card">
             <p class="shoe-brand">AI Recommended</p>
             <h2 class="shoe-name">Asics Gel-Kayano 30</h2>
-            <div class="size-box">ไซส์ที่แนะนำ: 42.5 EU (9 US)</div>
+            <div class="size-box">📐 ไซส์ที่แนะนำ: 42.5 EU (9 US)</div>
             <div class="ai-reasoning">
                 <strong style="color:#3B5FDB;">วิเคราะห์โดย Gemini:</strong><br>
                 เนื่องจากคุณมีสรีระเท้ากว้าง (10.2 ซม.) และต้องการใช้งานเพื่อการวิ่ง ระบบจึงแนะนำรุ่นที่มี Support หน้าเท้ากว้างเป็นพิเศษ เพื่อลดการบีบรัดขณะออกกำลังกาย
@@ -222,13 +379,118 @@
         </div>
 
         <div class="action-group">
-            <button class="btn-chat" onclick="location.href='chat.html'">
-                💬 สอบถาม AI Advisor เพิ่มเติม
-            </button>
-            <button class="btn-done" onclick="location.href='index.html'">เสร็จสิ้น ✓</button>
+            <button class="btn-primary" onclick="location.href='index.html'">เสร็จสิ้น</button>
         </div>
     </main>
 
     <footer>Computer Science, RMUTT | © 2026 ShoeSpace Project</footer>
+
+    <!-- ── CHAT FAB ── -->
+    <div class="chat-fab-label" id="fabLabel">💬 ถาม AI Advisor</div>
+    <button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="เปิด AI Advisor">💬<span class="notif" id="notifDot"></span></button>
+
+    <!-- ── CHAT POPUP ── -->
+    <div class="chat-popup" id="chatPopup">
+        <div class="popup-header">
+            <div class="popup-header-left">
+                <div class="popup-avatar"></div>
+                <div>
+                    <div class="popup-title">AI Advisor</div>
+                    <div class="popup-subtitle">Powered by Gemini ✦</div>
+                </div>
+            </div>
+            <button class="popup-close" onclick="toggleChat()">✕</button>
+        </div>
+
+        <div class="popup-messages" id="popupMessages">
+            <div class="p-msg p-ai">
+                สวัสดีครับ! ผมคือ AI Advisor ยินดีที่ได้แนะนำรองเท้า Asics Gel-Kayano 30 ให้คุณครับ มีคำถามเพิ่มเติมเกี่ยวกับไซส์หรือการใช้งานไหมครับ?
+            </div>
+        </div>
+
+        <div class="quick-chips" id="quickChips">
+            <span class="chip" onclick="sendChip('พื้นรองเท้านุ่มไหม?')">🦶 นุ่มไหม?</span>
+            <span class="chip" onclick="sendChip('ราคาเท่าไหร่?')">💰 ราคา?</span>
+            <span class="chip" onclick="sendChip('เหมาะกับวิ่งไหม?')">🏃 วิ่งได้ไหม?</span>
+        </div>
+
+        <div class="popup-input-area">
+            <input class="popup-input" id="popupInput" type="text" placeholder="พิมพ์คำถามที่นี่...">
+            <button class="popup-send" onclick="sendPopupMsg()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        let chatOpen = false;
+
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('chatPopup').classList.toggle('open', chatOpen);
+            document.getElementById('chatFab').classList.toggle('open', chatOpen);
+            document.getElementById('chatFab').textContent = chatOpen ? '+' : '💬';
+            if (chatOpen) {
+                document.getElementById('notifDot').style.display = 'none';
+                document.getElementById('fabLabel').classList.add('hidden');
+                document.getElementById('popupInput').focus();
+            } else {
+                document.getElementById('fabLabel').classList.remove('hidden');
+            }
+        }
+
+        function sendChip(text) {
+            document.getElementById('popupInput').value = text;
+            sendPopupMsg();
+            document.getElementById('quickChips').style.display = 'none';
+        }
+
+        function sendPopupMsg() {
+            const input = document.getElementById('popupInput');
+            const messages = document.getElementById('popupMessages');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // User bubble
+            const userEl = document.createElement('div');
+            userEl.className = 'p-msg p-user';
+            userEl.textContent = text;
+            messages.appendChild(userEl);
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+
+            // Typing indicator
+            const typing = document.createElement('div');
+            typing.className = 'p-typing';
+            typing.id = 'typing-indicator';
+            typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+            messages.appendChild(typing);
+            messages.scrollTop = messages.scrollHeight;
+
+            setTimeout(() => {
+                document.getElementById('typing-indicator')?.remove();
+                const aiEl = document.createElement('div');
+                aiEl.className = 'p-msg p-ai';
+                if (text.includes('นุ่ม')) {
+                    aiEl.textContent = 'นุ่มแน่นอนครับ! เนื่องจากพื้นรองเท้า Asics รุ่นนี้มีเทคโนโลยี PureGEL™ ที่ช่วยดูดซับแรงกระแทกได้ดีเยี่ยม เหมาะสำหรับการวิ่งระยะไกลครับ';
+                } else if (text.includes('ราคา') || text.includes('กี่บาท') || text.includes('บาท')) {
+                    aiEl.textContent = 'รุ่นนี้ราคาประมาณ 6,xxx บาทครับ สามารถเช็คโปรโมชั่นล่าสุดได้ที่ร้านค้า Asics ใกล้บ้านคุณเลยครับ';
+                } else if (text.includes('วิ่ง')) {
+                    aiEl.textContent = 'เหมาะมากครับ! Gel-Kayano 30 ออกแบบมาเพื่อนักวิ่งโดยเฉพาะ มีระบบ FF Blast+ Foam ช่วยให้ก้าวเบาและลดความล้าได้ดีครับ';
+                } else {
+                    aiEl.textContent = 'เป็นคำถามที่ดีครับ! จากสัดส่วนเท้ากว้าง 10.2 ซม. ของคุณ รุ่นนี้ถูกออกแบบมาเพื่อความสบายเป็นหลัก มีข้อสงสัยส่วนไหนเพิ่มเติมไหมครับ?';
+                }
+                messages.appendChild(aiEl);
+                messages.scrollTop = messages.scrollHeight;
+            }, 2000);
+        }
+
+        document.getElementById('popupInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') sendPopupMsg();
+        });
+
+        // Hide label after 4s
+        setTimeout(() => {
+            if (!chatOpen) document.getElementById('fabLabel').classList.add('hidden');
+        }, 4000);
+    </script>
 </body>
 </html>
